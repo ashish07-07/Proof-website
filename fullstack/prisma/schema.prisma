@@ -1,0 +1,53 @@
+// This is your Prisma schema file,
+// learn more about it in the docs: https://pris.ly/d/prisma-schema
+
+// Looking for ways to speed up your queries, or scale easily with your serverless or edge functions?
+// Try Prisma Accelerate: https://pris.ly/cli/accelerate-init
+
+generator client {
+  provider = "prisma-client-js"
+}
+
+datasource db {
+  provider = "postgresql"
+  url      = env("DATABASE_URL")
+}
+
+// model website{
+//    id Int @id @default(autoincrement())
+//    websiteurl String
+// }
+model Website {
+   id          Int      @id @default(autoincrement())
+   websiteUrl  String   @unique  // Ensure no duplicate websites
+   siteId      String   @unique @default(uuid())  // Unique identifier for the tracking script
+   userId      Int      // Associate the website with a user
+   createdAt   DateTime @default(now())  // Timestamp when added
+
+   // Relations
+   user        User     @relation(fields: [userId], references: [id]) // Link to the User model
+   events      Event[]  // Stores all tracking events for this website
+}
+
+model User {
+   id          Int       @id @default(autoincrement()) 
+  
+   email       String    @unique // Ensure unique emails
+   password    String
+    name         String?      // Store hashed password
+   createdAt   DateTime  @default(now()) // Timestamp when user registered
+
+   // Relations
+   websites    Website[] // One user can have multiple websites
+}
+
+model Event {
+   id          Int      @id @default(autoincrement())
+   websiteId   Int      // The website that triggered the event
+   eventType   String   // e.g., "page_view", "signup", "click"
+   eventData   Json     // Store additional data (button clicked, form filled, etc.)
+   createdAt   DateTime @default(now())
+
+   // Relations
+   website     Website  @relation(fields: [websiteId], references: [id])
+}
