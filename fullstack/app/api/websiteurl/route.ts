@@ -1,5 +1,8 @@
 interface Webdetails{
     websiteurl:string
+    name:string
+    email:string,
+    id:number
 }
 
 import prisma from "@/app/db";
@@ -25,6 +28,19 @@ export async function POST(req:Request,res:Response)
             )
          }
          console.log(body.websiteurl) 
+
+         const response=await prisma.website.create(
+            {
+                data:
+                {
+                      websiteUrl:body.websiteurl,
+                      userId:body.id
+                      
+
+                      
+                }
+            }
+         )
          
 
         
