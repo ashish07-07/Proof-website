@@ -362,7 +362,8 @@ export default function WebsiteForm() {
       
       if (data.siteId && data.websiteUrl) {
         const sanitizedUrl = data.websiteUrl.replace(/(^\w+:|^)\/\//, "");
-        const scriptText = `<script async src="https://${sanitizedUrl}/api/pixel.js?site-id=${data.siteId}"></script>`;
+        // const scriptText = `<script async src="https://${sanitizedUrl}/api/pixel.js?site-id=${data.siteId}"></script>`;
+        const scriptText = `<script async src="https://proof-website.vercel.app/api/pixel.js?site-id=${data.siteId}"></script>`
         setScriptCode(scriptText);
         setShowScriptModal(true);
       }
